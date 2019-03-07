@@ -52,6 +52,8 @@ exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.
 for_window [class="Firefox"] move window to workspace $ws1
 exec --no-startup-id firefox
 
+for_window [class="Code"] move window to workspace $ws3
+
 for_window [class="TerminalWorkspace"] move window to workspace $ws2
 exec --no-startup-id kitty --class "TerminalWorkspace"
 exec --no-startup-id kitty --class "TerminalWorkspace"
