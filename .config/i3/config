@@ -44,7 +44,7 @@ bindsym $mod+d exec dmenu_run
 #
 #
 exec "setxkbmap -layout es"
-exec compton -cCGfF -b
+exec compton -CGfF -b
 exec volumeicon
 exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.jpg
 
@@ -261,4 +261,5 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 ## Show the first scratchpad window
 #bindsym $mod+minus scratchpad show
 
-bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
+#bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
+bindsym Print exec gnome-screenshot -i
