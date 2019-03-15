@@ -47,6 +47,8 @@ exec "setxkbmap -layout es"
 exec compton -CGfF -b
 exec volumeicon
 exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.jpg
+exec --no-startup-id nm-applet
+exec --no-startup-id syndaemon -i .5 -K -R -d
 
 #Startup setup
 for_window [class="Firefox"] move window to workspace $ws1
