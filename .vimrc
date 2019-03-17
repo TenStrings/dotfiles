@@ -22,6 +22,7 @@ Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'cespare/vim-toml'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
+Plug 'unblevable/quick-scope'
 call plug#end()
 
 if executable('typescript-language-server')
@@ -113,19 +114,6 @@ set ruler
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
 
-function! GetVisualSelection()
-    " Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos("'<")[1:2]
-    let [line_end, column_end] = getpos("'>")[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return ''
-    endif
-    let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    return join(lines, "\n")
-endfunction
-
 " Assumes you have a Ruby with SiB available in the PATH
 " If it doesn't work, you may need to `gem install seeing_is_believing`
 
@@ -185,3 +173,5 @@ augroup seeingIsBelievingSettings
   autocmd FileType ruby vmap <buffer> <Leader>n :call SibAnnotateMarked("'<,'>")<CR>;
   autocmd FileType ruby vmap <buffer> <Leader>v :call SibCleanAnnotations("'<,'>")<CR>;
 augroup END
+
+:nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
