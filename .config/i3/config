@@ -49,6 +49,7 @@ exec volumeicon
 exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.jpg
 exec --no-startup-id nm-applet
 exec --no-startup-id syndaemon -i .5 -K -R -d
+exec_always --no-startup-id flashfocus
 
 #Startup setup
 for_window [class="Firefox"] move window to workspace $ws1
@@ -265,3 +266,4 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 
 #bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
 bindsym Print exec gnome-screenshot -i
+bindsym $mod+Shift+t exec "transset -t -a"
