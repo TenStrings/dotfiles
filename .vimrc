@@ -23,6 +23,7 @@ Plug 'cespare/vim-toml'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
 Plug 'unblevable/quick-scope'
+Plug 'dracula/vim', { 'as': 'dracula' }
 call plug#end()
 
 if executable('typescript-language-server')
@@ -58,9 +59,6 @@ let g:ale_linters_explicit = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 
-colorscheme atlantic-dark
-colorscheme codedark
-
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
@@ -77,14 +75,15 @@ set smartcase
 set splitbelow
 set splitright
 
+colorscheme dracula
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+
 let t:is_transparent = 0
 function! Toggle_transparent()
     if t:is_transparent == 0
-        highlight Normal ctermbg=none
-        highlight NonText ctermbg=none
         let t:is_transparent = 1
     else
-        colorscheme codedark
         let t:is_transparent = 0
     endif
 endfunction
