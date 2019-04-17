@@ -64,9 +64,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+imap jk <Esc>
+imap kj <Esc>
+
 nnoremap <silent> <C-n> :set relativenumber!<cr>
 
-set timeout timeoutlen=1000 ttimeoutlen=150
+set timeout timeoutlen=200 ttimeoutlen=150
 
 set mouse=n
 set ignorecase
