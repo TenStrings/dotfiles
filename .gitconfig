@@ -1,6 +1,7 @@
 [user]
 	name = Enzo Cioppettini
 	email = ecioppettini@atixlabs.com
+	signingkey = 08E1C4BC8C82C681
 [core]
 	editor = vim
 	excludesfile = /home/ecioppettini/.gitignore_global
@@ -16,3 +17,5 @@
     dc = diff --cached
 [rerere]
 	enabled = true
+[commit]
+	gpgsign = true
