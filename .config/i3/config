@@ -111,6 +111,8 @@ bindsym $mod+v split v
 # split in vertical orientation
 bindsym $mod+n split h
 
+bindsym $mod+t split toggle
+
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
@@ -126,16 +128,16 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+a focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
+set $ws1 "1:&#xf269; Browser"
+set $ws2 "2:&#xf120; Terminal"
+set $ws3 "3:&#xf1c9; Editor"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
