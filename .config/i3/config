@@ -46,7 +46,7 @@ bindsym $mod+d exec dmenu_run
 exec "setxkbmap -layout es"
 exec compton -CGfF -b
 exec volumeicon
-exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.jpg
+exec feh --bg-fill ~/.config/i3/wallpapers/background-cement-concrete-242236.jpg
 exec --no-startup-id nm-applet
 exec --no-startup-id syndaemon -i .5 -K -R -d
 exec_always --no-startup-id flashfocus
@@ -202,10 +202,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-set $bg-color 	         #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
+# set $bg-color 	         #2f343f
+set $bg-color 	         #bfbeba
+set $inactive-bg-color 	 #bfbeba
+set $text-color          #000429
+#set $inactive-text-color #2e2e2e
+set $inactive-text-color #7c7c7c
 set $urgent-bg-color     #E53935
 
 # window colors
@@ -221,7 +223,7 @@ bar {
     status_command i3blocks
     colors {
         background $bg-color
-            #separator #757575
+        separator #757575
         #                  border             background         text
         focused_workspace  $bg-color          $bg-color          $text-color
         inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
