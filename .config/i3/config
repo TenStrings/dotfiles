@@ -81,17 +81,15 @@ set $down j
 set $left h
 set $right l
 
-# change focus
 bindsym $mod+$left  focus left
 bindsym $mod+$down  focus down
 bindsym $mod+$up    focus up
 bindsym $mod+$right focus right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+# workspace settings
+bindsym $mod+Right workspace next
+bindsym $mod+Left workspace prev
+bindsym $mod+Tab workspace back_and_forth
 
 # move focused window
 bindsym $mod+Shift+$left  move left
