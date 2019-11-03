@@ -121,6 +121,17 @@ set splitright
 
 set ruler
 
+"" netrw
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_winsize = 25
+" open new files in a new tab
+let g:netrw_browse_split = 3
+
+"" fuzzy finding
+set path+=**
+set wildmenu
+
 """"""""""""""""""""""""
 "  COLORSCHEMES        "
 """"""""""""""""""""""""
