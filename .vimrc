@@ -35,8 +35,17 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vmchale/ion-vim'
 call plug#end()
 
+""""""""""""""""""""""""
+"  ASYNC COMPLETE      "
+""""""""""""""""""""""""
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 """""""""""""
-"  RLS      "
+"  LSP      "
 """""""""""""
 "" typescript language server
 if executable('typescript-language-server')
@@ -48,20 +57,22 @@ if executable('typescript-language-server')
       \ })
 endif
 
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'whitelist': ['*'],
-    \ 'priority': 10,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
+autocmd FileType javascript nnoremap ;d :LspDefinition<CR>
+autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
+autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
+autocmd FileType javascript nnoremap ;r :LspRename<CR>
 
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
+"" rls (rust language server)
+if executable('rls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+endif
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-
+autocmd FileType rust nnoremap ;d :LspDefinition<CR>
 "" Ale settings
 let g:ale_fixers = {
 \ 'javascript': ['prettier', 'eslint'],
@@ -72,6 +83,18 @@ let g:ale_fix_on_save = 1
 let g:ale_linters_explicit = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+
+"" misc
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'whitelist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+
+let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+let g:lsp_highlight_references_enabled = 1
 
 """"""""""""""""""""""""
 "  CUSTOM KEYBINDINGS  "
@@ -153,11 +176,6 @@ endif
 nnoremap ,rcomp :-1read $HOME/.vim/templates/component.jsx<CR>/SkeletonName<CR>vgn
 nnoremap ,jest :-1read $HOME/.vim/templates/component.test.jsx<CR>7j
 nnoremap ,sh :-1read $HOME/.vim/templates/skeleton.sh<CR>o<Esc>o
-autocmd FileType javascript nnoremap ;d :LspDefinition<CR>
-autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;r :LspRename<CR>
-
 ":command Datetime :put =strftime('%Y/%m/%d %T')<CR>kJ
 
 nmap <silent> ;F <Plug>(ale_previous_wrap)
