@@ -33,6 +33,8 @@ Plug 'xolox/vim-notes'
 Plug 'unblevable/quick-scope'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vmchale/ion-vim'
+Plug 'keremc/asyncomplete-racer.vim', { 'for': 'rust' }
+Plug 'racer-rust/vim-racer', { 'for': 'rust'}
 call plug#end()
 
 """"""""""""""""""""""""
@@ -44,6 +46,13 @@ let g:asyncomplete_auto_popup = 1
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+" have racer as a complete soure
+if executable('racer')
+autocmd User asyncomplete_setup call asyncomplete#register_source(
+    \ asyncomplete#sources#racer#get_source_options())
+endif
+
 """""""""""""
 "  LSP      "
 """""""""""""
@@ -72,7 +81,10 @@ if executable('rls')
         \ })
 endif
 
-autocmd FileType rust nnoremap ;d :LspDefinition<CR>
+autocmd FileType rust nnoremap <localleader>d :LspDefinition<CR>
+autocmd FileType rust nnoremap <C-@> :LspDocumentFormat<CR>
+autocmd FileType rust nnoremap <localleader>h :LspHover<CR>
+
 "" Ale settings
 let g:ale_fixers = {
 \ 'javascript': ['prettier', 'eslint'],
@@ -143,6 +155,7 @@ set splitbelow
 set splitright
 
 set ruler
+let maplocalleader = "º"
 
 "" netrw
 let g:netrw_liststyle = 3
