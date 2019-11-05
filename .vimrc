@@ -37,6 +37,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'chrisbra/Colorizer'
 Plug 'rakr/vim-one'
 Plug 'yasukotelin/shirotelin'
+Plug 'jparise/vim-graphql'
 call plug#end()
 
 """"""""""""""""""""""""
@@ -167,6 +168,7 @@ set wildmenu
 colorscheme one
 set background=light
 let g:airline_theme='one'
+let g:one_allow_italics = 1
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
