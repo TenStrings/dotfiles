@@ -203,7 +203,7 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set nocompatible
 set path+=**
 
-set timeout timeoutlen=200 ttimeoutlen=150
+set timeout timeoutlen=200 ttimeoutlen=500
 
 set mouse=n
 set ignorecase
@@ -213,7 +213,10 @@ set splitbelow
 set splitright
 
 set ruler
+
 let maplocalleader = "º"
+let mapleader = "-"
+
 
 "" netrw
 let g:netrw_liststyle = 3
