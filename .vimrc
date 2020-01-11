@@ -33,6 +33,10 @@ Plug 'xolox/vim-notes'
 Plug 'unblevable/quick-scope'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vmchale/ion-vim'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'chrisbra/Colorizer'
+Plug 'rakr/vim-one'
+Plug 'yasukotelin/shirotelin'
 call plug#end()
 
 """""""""""""
@@ -120,11 +124,15 @@ set splitbelow
 set splitright
 
 set ruler
+set termguicolors
 
 """"""""""""""""""""""""
 "  COLORSCHEMES        "
 """"""""""""""""""""""""
-colorscheme dracula
+" colorscheme dracula
+colorscheme one
+set background=light
+let g:airline_theme='one'
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
