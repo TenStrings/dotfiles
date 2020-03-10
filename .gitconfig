@@ -1,7 +1,6 @@
 [user]
 	name = Enzo Cioppettini
 [core]
-	editor = vim
 	excludesfile = /home/ecioppettini/.gitignore_global
 [alias]
     ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
