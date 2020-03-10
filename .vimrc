@@ -155,6 +155,8 @@ let g:netrw_browse_split = 3
 set path+=**
 set wildmenu
 
+set visualbell noerrorbells
+
 """"""""""""""""""""""""
 "  COLORSCHEMES        "
 """"""""""""""""""""""""
