@@ -38,6 +38,8 @@ Plug 'chrisbra/Colorizer'
 Plug 'rakr/vim-one'
 Plug 'yasukotelin/shirotelin'
 Plug 'jparise/vim-graphql'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 call plug#end()
 
 """"""""""""""""""""""""
