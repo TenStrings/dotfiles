@@ -286,10 +286,3 @@ let g:colorizer_auto_filetype='scss,css,html'
 "" gitcommit
 au FileType gitcommit setlocal tw=72
 
-""""""""""""""""""""""""""""""""""""""""""""
-"  wayland config, think about this better "
-""""""""""""""""""""""""""""""""""""""""""""
-"xnoremap "+y y:call system("wl-copy", @")<cr>
-"nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
-"nnoremap "*p :let @"=substitute(system("wl-paste --no-newline --primary"), '<C-v><C-m>', '', 'g')<cr>p
-
