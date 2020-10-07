@@ -2,7 +2,7 @@
 "  PLUGINS  "
 """""""""""""
 " including plugin-related mappings and autocmds
-"" vim-plug
+"" Install vim-plug if not installed 
 " commands for plugins -> :PlugInstall, :PlugUpdate [name], :PlugClean
 " upgrade vim-plug     -> :PlugUpgrade
 
@@ -13,17 +13,17 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-"" Installed plugins
+"" List of plugins
 call plug#begin()
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'w0rp/ale'
 Plug 'leshill/vim-json'
 Plug 'tomasiser/vim-code-dark'
 Plug 'vim-airline/vim-airline'
 Plug 'enricobacis/vim-airline-clock'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
@@ -33,6 +33,14 @@ Plug 'xolox/vim-notes'
 Plug 'unblevable/quick-scope'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vmchale/ion-vim'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'chrisbra/Colorizer'
+Plug 'rakr/vim-one'
+Plug 'yasukotelin/shirotelin'
+Plug 'chrisbra/Colorizer'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'tpope/vim-fugitive'
+Plug 'kana/vim-fakeclip'
 call plug#end()
 
 """"""""""""""""""""""""
@@ -47,6 +55,10 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 """""""""""""
 "  LSP      "
 """""""""""""
+"" settings
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_highlight_references_enabled = 1
 "" typescript language server
 if executable('typescript-language-server')
     au User lsp_setup call lsp#register_server({
@@ -62,39 +74,11 @@ autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
 autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
 autocmd FileType javascript nnoremap ;r :LspRename<CR>
 
-"" rls (rust language server)
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
-endif
+let g:lsp_settings_filetype_rust = ['rust-analyzer', 'rls']
 
-autocmd FileType rust nnoremap ;d :LspDefinition<CR>
-"" Ale settings
-let g:ale_fixers = {
-\ 'javascript': ['prettier', 'eslint'],
-\  '*': ['remove_trailing_lines', 'trim_whitespace']
-\}
-let g:ale_linters = {'javascript': ['eslint']}
-let g:ale_fix_on_save = 1
-let g:ale_linters_explicit = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-
-"" misc
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'whitelist': ['*'],
-    \ 'priority': 10,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-
-let g:lsp_signs_enabled = 1         " enable signs
-let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-let g:lsp_highlight_references_enabled = 1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 """"""""""""""""""""""""
 "  CUSTOM KEYBINDINGS  "
@@ -133,6 +117,9 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set nocompatible
 set path+=**
 
+" Ignore the public directory when using :find with wildmenu
+set wildignore+=**/public/**
+
 set timeout timeoutlen=200 ttimeoutlen=150
 
 set mouse=n
@@ -157,10 +144,36 @@ set wildmenu
 
 set visualbell noerrorbells
 
+set autoread
+
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+endif
+
+set shell=/usr/bin/sh
+
+"" netrw
+" tree like view
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+" open in previous window (1 = hsplit, vsplit, tab, previous window)
+let g:netrw_browse_split = 4
+" keep at % size
+let g:netrw_winsize = 20
+
+augroup netrw_mapping
+    autocmd!
+    autocmd FileType netrw nnoremap <c-l> <C-w>l<CR>
+augroup END
+
+function! NetrwMapping()
+    noremap <buffer> <c-l> <c-w>l<CR>
+endfunction
+
 """"""""""""""""""""""""
 "  COLORSCHEMES        "
 """"""""""""""""""""""""
-colorscheme dracula
+colorscheme shirotelin
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
@@ -178,13 +191,24 @@ endif
 nnoremap ,rcomp :-1read $HOME/.vim/templates/component.jsx<CR>/SkeletonName<CR>vgn
 nnoremap ,jest :-1read $HOME/.vim/templates/component.test.jsx<CR>7j
 nnoremap ,sh :-1read $HOME/.vim/templates/skeleton.sh<CR>o<Esc>o
+
+""" JS
+autocmd FileType javascript nnoremap ;d :LspDefinition<CR>
+autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
+autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
+autocmd FileType javascript nnoremap ;r :LspRename<CR>
+
+""" Rust
+autocmd FileType rust nnoremap gd :LspDefinition<CR>
+autocmd FileType rust nnoremap gh :LspHover<CR>
+autocmd FileType rust nnoremap gh :LspHover<CR>
+" Setting rustfmt as a formatter may also be an option
+autocmd FileType rust nnoremap gq :LspDocumentFormat<CR>
+
 ":command Datetime :put =strftime('%Y/%m/%d %T')<CR>kJ
 
-nmap <silent> ;F <Plug>(ale_previous_wrap)
-nmap <silent> ;f <Plug>(ale_next_wrap)
-
-
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
+
 
 """""""""""""""""""""""""""""""""""""""""""
 "  AUTOCOMMANDS, incl. FILETYPE SETTINGS  "
@@ -255,3 +279,17 @@ augroup END
 
 "" Auto reload .vimrc when editing
 autocmd BufWritePost .vimrc source %
+"" colors
+let g:colorizer_auto_filetype='scss,css,html'
+
+
+"" gitcommit
+au FileType gitcommit setlocal tw=72
+
+""""""""""""""""""""""""""""""""""""""""""""
+"  wayland config, think about this better "
+""""""""""""""""""""""""""""""""""""""""""""
+"xnoremap "+y y:call system("wl-copy", @")<cr>
+"nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
+"nnoremap "*p :let @"=substitute(system("wl-paste --no-newline --primary"), '<C-v><C-m>', '', 'g')<cr>p
+
