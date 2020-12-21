@@ -38,7 +38,6 @@ Plug 'chrisbra/Colorizer'
 Plug 'rakr/vim-one'
 Plug 'yasukotelin/shirotelin'
 Plug 'chrisbra/Colorizer'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'tpope/vim-fugitive'
 Plug 'kana/vim-fakeclip'
 call plug#end()
@@ -173,7 +172,7 @@ endfunction
 """"""""""""""""""""""""
 "  COLORSCHEMES        "
 """"""""""""""""""""""""
-colorscheme shirotelin
+" colorscheme shirotelin
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
