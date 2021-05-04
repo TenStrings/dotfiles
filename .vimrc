@@ -15,69 +15,101 @@ endif
 
 "" List of plugins
 call plug#begin()
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'leshill/vim-json'
-Plug 'tomasiser/vim-code-dark'
+Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
 Plug 'enricobacis/vim-airline-clock'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'cespare/vim-toml'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
 Plug 'unblevable/quick-scope'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'vmchale/ion-vim'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'chrisbra/Colorizer'
-Plug 'rakr/vim-one'
-Plug 'yasukotelin/shirotelin'
-Plug 'chrisbra/Colorizer'
-Plug 'tpope/vim-fugitive'
-Plug 'kana/vim-fakeclip'
+Plug 'vmchale/ion-vim'
+" Collection of common configurations for the Nvim LSP client
+Plug 'neovim/nvim-lspconfig'
+" Extensions to built-in LSP, for example, providing type inlay hints
+Plug 'nvim-lua/lsp_extensions.nvim'
+" Autocompletion framework for built-in LSP
+Plug 'nvim-lua/completion-nvim'
 call plug#end()
 
-""""""""""""""""""""""""
-"  ASYNC COMPLETE      "
-""""""""""""""""""""""""
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+""""""""""""""""""""""""
+"  COLORSCHEMES        "
+""""""""""""""""""""""""
+set t_Co=256
+
+syntax enable
+let g:airline_theme='solarized'
+" set background=light
+" colorscheme solarized
+
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+
+set hlsearch
+hi Search ctermbg=Blue
+hi Search ctermfg=White
+hi Pmenu ctermfg=White ctermbg=Black guibg=LightMagenta
+
 """""""""""""
 "  LSP      "
 """""""""""""
 "" settings
-let g:lsp_signs_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_highlight_references_enabled = 1
-"" typescript language server
-if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'javascript support using typescript-language-server',
-      \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-      \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
-      \ 'whitelist': ['javascript', 'javascript.jsx']
-      \ })
-endif
 
-autocmd FileType javascript nnoremap ;d :LspDefinition<CR>
-autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;r :LspRename<CR>
+" Set completeopt to have a better completion experience
+" :help completeopt
+" menuone: popup even when there's only one match
+" noinsert: Do not insert text until a selection is made
+" noselect: Do not select, force user to select one from the menu
+set completeopt=menuone,noinsert,noselect
 
-let g:lsp_settings_filetype_rust = ['rust-analyzer', 'rls']
+" Avoid showing extra messages when using completion
+set shortmess+=c
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" Configure LSP
+" https://github.com/neovim/nvim-lspconfig#rust_analyzer
+lua <<EOF
+
+-- nvim_lsp object
+local nvim_lsp = require'lspconfig'
+
+-- function to attach completion when setting up lsp
+local on_attach = function(client)
+    require'completion'.on_attach(client)
+end
+
+-- Enable rust_analyzer
+nvim_lsp.rust_analyzer.setup({ on_attach=on_attach })
+
+-- Enable diagnostics
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = true,
+    signs = true,
+    update_in_insert = true,
+  }
+)
+EOF
+
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+" use <Tab> as trigger keys
+imap <Tab> <Plug>(completion_smart_tab)
+imap <S-Tab> <Plug>(completion_smart_s_tab)
+
+" Code navigation shortcuts
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gh     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gq    <cmd>lua vim.lsp.buf.formatting()<CR>
+
+autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
 
 """"""""""""""""""""""""
 "  CUSTOM KEYBINDINGS  "
@@ -130,13 +162,6 @@ set splitright
 
 set ruler
 
-"" netrw
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_winsize = 25
-" open new files in a new tab
-let g:netrw_browse_split = 3
-
 "" fuzzy finding
 set path+=**
 set wildmenu
@@ -170,13 +195,6 @@ function! NetrwMapping()
 endfunction
 
 """"""""""""""""""""""""
-"  COLORSCHEMES        "
-""""""""""""""""""""""""
-" colorscheme shirotelin
-highlight Normal ctermbg=none
-highlight NonText ctermbg=none
-
-""""""""""""""""""""""""
 "  SNIPPETS            "
 """"""""""""""""""""""""
 "" Auto
@@ -190,19 +208,6 @@ endif
 nnoremap ,rcomp :-1read $HOME/.vim/templates/component.jsx<CR>/SkeletonName<CR>vgn
 nnoremap ,jest :-1read $HOME/.vim/templates/component.test.jsx<CR>7j
 nnoremap ,sh :-1read $HOME/.vim/templates/skeleton.sh<CR>o<Esc>o
-
-""" JS
-autocmd FileType javascript nnoremap ;d :LspDefinition<CR>
-autocmd FileType javascript nnoremap ;vd :vsplit<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;sd :split<CR>:LspDefinition<CR>
-autocmd FileType javascript nnoremap ;r :LspRename<CR>
-
-""" Rust
-autocmd FileType rust nnoremap gd :LspDefinition<CR>
-autocmd FileType rust nnoremap gh :LspHover<CR>
-autocmd FileType rust nnoremap gh :LspHover<CR>
-" Setting rustfmt as a formatter may also be an option
-autocmd FileType rust nnoremap gq :LspDocumentFormat<CR>
 
 ":command Datetime :put =strftime('%Y/%m/%d %T')<CR>kJ
 
@@ -280,7 +285,6 @@ augroup END
 autocmd BufWritePost .vimrc source %
 "" colors
 let g:colorizer_auto_filetype='scss,css,html'
-
 
 "" gitcommit
 au FileType gitcommit setlocal tw=72
