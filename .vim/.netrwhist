@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/ecioppettini/Projects/chain-libs'
+let g:netrw_dirhist_8='/home/ecioppettini/Projects/chain-libs/chain-network/src'
+let g:netrw_dirhist_7='/home/ecioppettini/Projects/chain-libs/chain-network'
+let g:netrw_dirhist_6='/home/ecioppettini/Projects/chain-libs/chain-watch/src'
+let g:netrw_dirhist_5='/home/ecioppettini/Projects/chain-libs/chain-watch'
+let g:netrw_dirhist_4='/home/ecioppettini/Projects/chain-libs'
+let g:netrw_dirhist_3='/home/ecioppettini/Projects/jormungandr/testing/jormungandr-integration-tests'
+let g:netrw_dirhist_2='/home/ecioppettini/Projects/jormungandr/testing/jormungandr-integration-tests/src'
+let g:netrw_dirhist_1='/home/ecioppettini/Projects/jormungandr/testing/jormungandr-integration-tests/src/non_functional'
