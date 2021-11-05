@@ -1,7 +1,7 @@
 [user]
 	name = Enzo Cioppettini
 [core]
-	editor = vim
+	editor = vi
 	excludesfile = /home/ecioppettini/.gitignore_global
 [alias]
     ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
@@ -14,6 +14,10 @@
     st = status -s
     dc = diff --cached
 [rerere]
-	enabled = true
+	enabled = false
 [include]
     path = .gitconfig.local
+[commit]
+	gpgsign = true
+[credential "https://github.com"]
+	helper = !gh auth git-credential
