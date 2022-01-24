@@ -131,6 +131,12 @@ local servers = {
             rust_analyzer = {
                 cargo = {
                     allFeatures = true
+                },
+                procMacro = {
+                    enable = true
+                },
+                checkOnSave = {
+                    command = "clippy"
                 }
             }
         }
