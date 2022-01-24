@@ -231,6 +231,7 @@ require'lspconfig'.sumneko_lua.setup {
 }
 
 map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>')
+map('n', '<leader>gh', '<cmd>Gitsigns blame_line<CR>')
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
 map("n", "<leader>gq", "<cmd>lua vim.lsp.buf.formatting()<CR>")
 -- map('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
