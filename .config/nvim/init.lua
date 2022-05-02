@@ -61,11 +61,7 @@ cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').compil
 -- autocmd('misc_aucmds', { [[BufWinEnter * checktime]], [[TextYankPost * silent! lua vim.highlight.on_yank()]] }, true)
 
 -- Colorscheme
-opt.termguicolors = true
-opt.background = 'light'
-cmd('colorscheme solarized')
---
---
+-- cmd('colorscheme solarized')
 
 opt.termguicolors = true
 opt.background = 'light'
@@ -128,7 +124,7 @@ local servers = {
         command = "rust_analyzer",
         format = true,
         settings = {
-            rust_analyzer = {
+            ["rust_analyzer"] = {
                 cargo = {
                     allFeatures = true
                 },
@@ -202,8 +198,8 @@ else
 end
 
 local HOME = fn.expand('$HOME')
-local sumneko_root_path = HOME .. '/Sources/lua-language-server'
-local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
+local sumneko_root_path = HOME .. '/lua-lsp'
+local sumneko_binary = sumneko_root_path .. "/bin/" .. "/lua-language-server"
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
@@ -246,7 +242,7 @@ map('n', '<leader>fg', '<cmd> lua require("telescope.builtin").live_grep()<cr>')
 map('n', '<leader>fm', '<cmd> lua require("telescope.builtin").live_grep()<cr>')
 map('n', '<leader>fb', '<cmd> lua require("telescope.builtin").buffers()<cr>')
 map('n', '<leader>fh', '<cmd> lua require("telescope.builtin").help_tags()<cr>')
-map('n', '<leader>ga', '<cmd> lua require("telescope.builtin").lsp_code_actions()<cr>')
+map('n', '<leader>ga', '<cmd> lua vim.lsp.buf.code_action()<cr>')
 map('n', 'gra', '<cmd> lua require("telescope.builtin").lsp_range_code_actions()<cr>')
 map('n', 'gr', '<cmd> lua require("telescope.builtin").lsp_references()<cr>')
 
@@ -257,7 +253,7 @@ cmd('autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 1000)')
 cmd('autocmd BufWritePre *.ts lua vim.lsp.buf.formatting_sync(nil, 1000)')
 cmd('autocmd BufWritePre *.lua lua vim.lsp.buf.formatting_sync(nil, 1000)')
 
-vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level("debug")
 
 function _G.dump(...)
     local objects = vim.tbl_map(vim.inspect, {...})
@@ -265,3 +261,19 @@ function _G.dump(...)
 end
 
 cmd('au! BufRead,BufNewFile *.glsl,*.vert,*.frag set filetype=glsl')
+
+require('rust-tools').setup({
+    server = {
+        ["rust_analyzer"] = {
+            cargo = {
+                allFeatures = true
+            },
+            procMacro = {
+                enable = true
+            },
+            checkOnSave = {
+                command = "clippy"
+            }
+        }
+    }
+})

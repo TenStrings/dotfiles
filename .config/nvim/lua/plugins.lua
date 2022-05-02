@@ -11,21 +11,21 @@ return require('packer').startup(function()
         end
     }
     use 'ishan9299/nvim-solarized-lua'
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
-        run = ':TSUpdate',
-        config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = {"glsl", "kotlin"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-                highlight = {
-                    enable = true,
-                    disable = {"c", "rust"},
-                    additional_vim_regex_highlighting = false
-                }
-            }
-        end
-    }
+    -- use {
+    --     'nvim-treesitter/nvim-treesitter',
+    --     requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
+    --     run = ':TSUpdate',
+    --     config = function()
+    --         require'nvim-treesitter.configs'.setup {
+    --             ensure_installed = {"glsl", "kotlin"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    --             highlight = {
+    --                 enable = true,
+    --                 disable = {"c", "rust"},
+    --                 additional_vim_regex_highlighting = false
+    --             }
+    --         }
+    --     end
+    -- }
     use {
         'hrsh7th/nvim-compe',
         event = 'InsertEnter *'
@@ -40,12 +40,7 @@ return require('packer').startup(function()
     use 'neovim/nvim-lspconfig'
     use 'kosayoda/nvim-lightbulb'
     use 'nvim-lua/completion-nvim'
-    use {
-        'simrat39/rust-tools.nvim',
-        config = function()
-            require('rust-tools').setup()
-        end
-    }
+    use 'simrat39/rust-tools.nvim'
     use {
         'nvim-telescope/telescope.nvim',
         requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
@@ -65,4 +60,6 @@ return require('packer').startup(function()
         end
     }
     use 'cespare/vim-toml'
+    use 'gpanders/editorconfig.nvim'
+    use 'stevearc/dressing.nvim'
 end)
