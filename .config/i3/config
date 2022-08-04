@@ -43,13 +43,13 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 #
 #
-exec "setxkbmap -layout es"
-exec compton -CGfF -b
+exec_always "setxkbmap -layout es -variant deadtilde"
+# exec compton -CGfF -b
 exec volumeicon
-exec feh --bg-fill ~/.config/i3/wallpapers/Dark-wallpaper-desktop-background-68.jpg
+exec feh --bg-fill ~/.config/i3/wallpapers/background-cement-concrete-242236.jpg
 exec --no-startup-id nm-applet
 exec --no-startup-id syndaemon -i .5 -K -R -d
-exec_always --no-startup-id flashfocus
+# exec_always --no-startup-id flashfocus
 
 #Startup setup
 for_window [class="Firefox"] move window to workspace $ws1
@@ -66,7 +66,12 @@ exec --no-startup-id kitty --class "TerminalWorkspace"
 for_window [instance="Vim-Window"] move window to scratchpad
 bindsym $mod+Shift+minus exec --no-startup-id kitty --class "Vim-Window" vim
 
-bindsym $mod+minus focus output DP-2; exec --no-startup-id $HOME/.config/i3/scripts/toggle-terminal.sh Vim-Window
+assign [instance="electron" window_role="browser-window"] $ws8
+assign [instance="electron" window_role="devtools"] $ws8
+
+assign [class="jetbrains-studio"] $ws8
+
+bindsym $mod+minus focus output eDP1; exec --no-startup-id $HOME/.config/i3/scripts/toggle-terminal.sh Vim-Window
 
 #Quake like Alacritty terminal
 for_window [instance="Quake"] move window to scratchpad
@@ -74,7 +79,12 @@ for_window [instance="Quake"] move absolute position 0 0
 for_window [instance="Quake"] border none
 exec --no-startup-id kitty --class "Quake"
 bindsym $mod+Shift+period exec --no-startup-id kitty --class "Quake"
-bindsym $mod+period focus output DP-2; exec --no-startup-id $HOME/.config/i3/scripts/toggle-terminal.sh Quake
+bindsym $mod+period focus output eDP1; exec --no-startup-id $HOME/.config/i3/scripts/toggle-terminal.sh Quake
+
+#Slack
+exec --no-startup-id slack
+assign [class="Slack"] $ws1
+
 
 set $up k
 set $down j
@@ -168,12 +178,16 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
+bindsym $mod+Shift+e move workspace to output right
+bindsym $mod+Shift+w move workspace to output left
+
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
+bindcode $mod+Shift+54 reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -202,10 +216,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-set $bg-color 	         #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
+# set $bg-color 	         #2f343f
+set $bg-color 	         #bfbeba
+set $inactive-bg-color 	 #bfbeba
+set $text-color          #000429
+#set $inactive-text-color #2e2e2e
+set $inactive-text-color #7c7c7c
 set $urgent-bg-color     #E53935
 
 # window colors
@@ -221,7 +237,7 @@ bar {
     status_command i3blocks
     colors {
         background $bg-color
-            #separator #757575
+        separator #757575
         #                  border             background         text
         focused_workspace  $bg-color          $bg-color          $text-color
         inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
@@ -265,7 +281,8 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 #bindsym $mod+minus scratchpad show
 
 #bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
-bindsym Print exec gnome-screenshot -i
+bindsym Print exec "flameshot gui"
 bindsym $mod+Shift+t exec "transset -t -a"
 bindsym $mod+m exec "i3-input -F 'mark %s' -l 1 -P 'Mark: '"
 bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
+
