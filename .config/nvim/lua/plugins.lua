@@ -11,21 +11,21 @@ return require('packer').startup(function()
         end
     }
     use 'ishan9299/nvim-solarized-lua'
-    -- use {
-    --     'nvim-treesitter/nvim-treesitter',
-    --     requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
-    --     run = ':TSUpdate',
-    --     config = function()
-    --         require'nvim-treesitter.configs'.setup {
-    --             ensure_installed = {"glsl", "kotlin"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-    --             highlight = {
-    --                 enable = true,
-    --                 disable = {"c", "rust"},
-    --                 additional_vim_regex_highlighting = false
-    --             }
-    --         }
-    --     end
-    -- }
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
+        run = ':TSUpdate',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+                ensure_installed = {"glsl", "kotlin", "solidity"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+                highlight = {
+                    enable = true,
+                    disable = {"c", "rust", "lua"},
+                    additional_vim_regex_highlighting = false
+                }
+            }
+        end
+    }
     use {
         'hrsh7th/nvim-compe',
         event = 'InsertEnter *'
