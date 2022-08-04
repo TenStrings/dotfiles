@@ -11,6 +11,7 @@
     ci = commit
     co = checkout
     st = status -s
+    s = status
     dc = diff --cached
 [rerere]
 	enabled = true
