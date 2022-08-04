@@ -1,1 +1,1 @@
-vim.opt.keywordprg = 'rusty-man --theme "Solarized(light)"'
+vim.opt.keywordprg = 'rusty-man --theme "Solarized (light)"'
