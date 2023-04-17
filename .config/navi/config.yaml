@@ -1,0 +1,36 @@
+# THIS IS EXPERIMENTAL
+# the config file schema may change at any time
+
+style:
+  tag:
+    # color: cyan # text color. possible values: https://bit.ly/3gloNNI
+    color: dark_blue
+    width_percentage: 26 # column width relative to the terminal window
+    min_width: 20 # minimum column width as number of characters
+  comment:
+    # color: blue
+    color: dark_magenta
+    width_percentage: 42
+    min_width: 45
+  snippet:
+    color: red
+
+finder:
+  command: skim # equivalent to the --finder option
+  overrides: --color=light
+  # overrides: --tac # equivalent to the --fzf-overrides option
+  # overrides_var: --tac # equivalent to the --fzf-overrides-var option
+
+# cheats:
+  # paths: 
+    # - /path/to/some/dir
+    # - /path/to/another/dir
+  # path: /path/to/some/dir # (DEPRECATED) equivalent to the --path option
+
+# search:
+  # tags: git,!checkout # equivalent to the --tag-rules option
+
+shell:
+  command: bash # shell used for shell out. possible values: bash, zsh, dash, ...
+  # finder_command: bash # similar, but for fzf's internals
+
