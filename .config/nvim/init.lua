@@ -1,8 +1,8 @@
 vim.g.mapleader = " "
 
 local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
-local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
-local g = vim.g -- a table to access global variables
+local fn = vim.fn   -- to call Vim functions e.g. fn.bufnr()
+local g = vim.g     -- a table to access global variables
 local opt = vim.opt -- to set options
 local lsp = vim.lsp -- to set options
 
@@ -14,7 +14,7 @@ local function map(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-map('', '<leader>c', '"+y') -- Copy to clipboard in normal, visual, select and operator modes
+map('', '<leader>c', '"+y')      -- Copy to clipboard in normal, visual, select and operator modes
 map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
 
@@ -26,7 +26,7 @@ map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {
     expr = true
 })
 
-map('n', '<C-l>', '<cmd>noh<CR>') -- Clear highlights
+map('n', '<C-l>', '<cmd>noh<CR>')   -- Clear highlights
 map('n', '<leader>o', 'm`o<Esc>``') -- Insert a newline in normal mode
 
 -- local ts = require 'nvim-treesitter.configs'
@@ -61,7 +61,7 @@ cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').compil
 -- autocmd('misc_aucmds', { [[BufWinEnter * checktime]], [[TextYankPost * silent! lua vim.highlight.on_yank()]] }, true)
 
 -- Colorscheme
--- cmd('colorscheme solarized')
+cmd('colorscheme shine')
 
 opt.termguicolors = true
 opt.background = 'light'
@@ -86,6 +86,8 @@ opt.wildmenu = true
 opt.visualbell = false
 opt.hlsearch = true
 opt.incsearch = true
+
+opt.makeprg = "just"
 
 local nvim_lsp = require('lspconfig')
 local on_attach = function(_, bufnr)
@@ -137,12 +139,12 @@ local servers = {
             }
         }
     }, {
-        command = "hls",
-        format = true
-    }, {
-        command = "tsserver",
-        format = false
-    }
+    command = "hls",
+    format = true
+}, {
+    command = "tsserver",
+    format = false
+}
 }
 
 for _, server in ipairs(servers) do
@@ -158,78 +160,69 @@ for _, server in ipairs(servers) do
     }
 end
 
-local eslint = require "eslint"
-local prettier = require "prettier"
+-- local eslint = require "eslint"
+-- local prettier = require "prettier"
+--
+-- nvim_lsp.efm.setup {
+--     on_attach = function(client, bufnr)
+--         client.resolved_capabilities.document_formatting = true
+--         client.resolved_capabilities.goto_definition = false
+--         on_attach(client, bufnr)
+--     end,
+--     init_options = {
+--         documentFormatting = true
+--     },
+--     filetypes = {"lua", "javascript", "typescript"},
+--     settings = {
+--         rootMarkers = {".git/"},
+--         languages = {
+--             lua = {
+--                 {
+--                     formatCommand = "lua-format -i --no-keep-simple-function-one-line --no-break-after-operator --column-limit=150 --break-after-table-lb",
+--                     formatStdin = true
+--                 }
+--             },
+--             javascript = {eslint},
+--             typescript = {eslint}
+--         }
+--     }
+-- }
 
-nvim_lsp.efm.setup {
-    on_attach = function(client, bufnr)
-        client.resolved_capabilities.document_formatting = true
-        client.resolved_capabilities.goto_definition = false
-        on_attach(client, bufnr)
-    end,
-    init_options = {
-        documentFormatting = true
-    },
-    filetypes = {"lua", "javascript", "typescript"},
-    settings = {
-        rootMarkers = {".git/"},
-        languages = {
-            lua = {
-                {
-                    formatCommand = "lua-format -i --no-keep-simple-function-one-line --no-break-after-operator --column-limit=150 --break-after-table-lb",
-                    formatStdin = true
+require 'lspconfig'.lua_ls.setup {
+    on_init = function(client)
+        local path = client.workspace_folders[1].name
+        if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+            client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+                Lua = {
+                    runtime = {
+                        -- Tell the language server which version of Lua you're using
+                        -- (most likely LuaJIT in the case of Neovim)
+                        version = 'LuaJIT'
+                    },
+                    -- Make the server aware of Neovim runtime files
+                    workspace = {
+                        checkThirdParty = false,
+                        library = {
+                            vim.env.VIMRUNTIME
+                            -- "${3rd}/luv/library"
+                            -- "${3rd}/busted/library",
+                        }
+                        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                        -- library = vim.api.nvim_get_runtime_file("", true)
+                    }
                 }
-            },
-            javascript = {eslint},
-            typescript = {eslint}
-        }
-    }
-}
+            })
 
-local system_name
-if fn.has("mac") == 1 then
-    system_name = "macOS"
-elseif fn.has("unix") == 1 then
-    system_name = "Linux"
-elseif fn.has('win32') == 1 then
-    system_name = "Windows"
-else
-    print("Unsupported system for sumneko")
-end
-
-local HOME = fn.expand('$HOME')
-local sumneko_root_path = HOME .. '/lua-lsp'
-local sumneko_binary = sumneko_root_path .. "/bin/" .. "/lua-language-server"
-
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-
-require'lspconfig'.sumneko_lua.setup {
-    cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
-    settings = {
-        Lua = {
-            runtime = {
-                version = 'LuaJIT',
-                path = runtime_path
-            },
-            diagnostics = {
-                globals = {'vim'}
-            },
-            workspace = {
-                library = vim.api.nvim_get_runtime_file("", true)
-            },
-            telemetry = {
-                enable = false
-            }
-        }
-    }
+            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+        end
+        return true
+    end
 }
 
 map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>')
 map('n', '<leader>gh', '<cmd>Gitsigns blame_line<CR>')
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-map("n", "<leader>gq", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+map("n", "<leader>gq", "<cmd>lua vim.lsp.buf.format()<CR>")
 -- map('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
 --
 map('n', '<leader>tt', ':NvimTreeToggle<CR>')
@@ -239,24 +232,30 @@ map('n', '<leader>tf', ':NvimTreeFocus<CR>')
 --
 map('n', '<leader>ff', '<cmd> lua require("telescope.builtin").find_files()<cr>');
 map('n', '<leader>fg', '<cmd> lua require("telescope.builtin").live_grep()<cr>')
-map('n', '<leader>fm', '<cmd> lua require("telescope.builtin").live_grep()<cr>')
 map('n', '<leader>fb', '<cmd> lua require("telescope.builtin").buffers()<cr>')
 map('n', '<leader>fh', '<cmd> lua require("telescope.builtin").help_tags()<cr>')
 map('n', '<leader>ga', '<cmd> lua vim.lsp.buf.code_action()<cr>')
 map('n', 'gra', '<cmd> lua require("telescope.builtin").lsp_range_code_actions()<cr>')
 map('n', 'gr', '<cmd> lua require("telescope.builtin").lsp_references()<cr>')
 
+require("telescope").setup {
+    pickers = {
+        colorscheme = {
+            enable_preview = true
+        }
+    }
+}
 -- autocommands
-cmd('autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)')
-cmd('autocmd BufWritePre *.c lua vim.lsp.buf.formatting_sync(nil, 1000)')
-cmd('autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 1000)')
-cmd('autocmd BufWritePre *.ts lua vim.lsp.buf.formatting_sync(nil, 1000)')
-cmd('autocmd BufWritePre *.lua lua vim.lsp.buf.formatting_sync(nil, 1000)')
+cmd('autocmd BufWritePre *.rs lua vim.lsp.buf.format()')
+cmd('autocmd BufWritePre *.c lua vim.lsp.buf.format()')
+cmd('autocmd BufWritePre *.js lua vim.lsp.buf.format()')
+cmd('autocmd BufWritePre *.ts lua vim.lsp.buf.format()')
+cmd('autocmd BufWritePre *.lua lua vim.lsp.buf.format()')
 
 -- vim.lsp.set_log_level("debug")
 
 function _G.dump(...)
-    local objects = vim.tbl_map(vim.inspect, {...})
+    local objects = vim.tbl_map(vim.inspect, { ... })
     print(unpack(objects))
 end
 
