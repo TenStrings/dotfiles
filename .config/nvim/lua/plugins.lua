@@ -5,7 +5,7 @@ return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
     use {
         'lewis6991/gitsigns.nvim',
-        requires = {'nvim-lua/plenary.nvim'},
+        requires = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('gitsigns').setup()
         end
@@ -13,14 +13,14 @@ return require('packer').startup(function()
     use 'ishan9299/nvim-solarized-lua'
     use {
         'nvim-treesitter/nvim-treesitter',
-        requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
+        requires = { 'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects' },
         run = ':TSUpdate',
         config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = {"glsl", "kotlin", "solidity"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+            require 'nvim-treesitter.configs'.setup {
+                ensure_installed = { "glsl", "kotlin", "solidity" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 highlight = {
                     enable = true,
-                    disable = {"c", "rust", "lua"},
+                    disable = { "c", "rust", "lua" },
                     additional_vim_regex_highlighting = false
                 }
             }
@@ -32,7 +32,7 @@ return require('packer').startup(function()
     }
     use {
         'norcalli/nvim-colorizer.lua',
-        ft = {'css', 'javascript', 'vim', 'html'},
+        ft = { 'css', 'javascript', 'vim', 'html' },
         config = [[require('colorizer').setup {'css', 'javascript', 'vim', 'html'}]]
     }
     use 'unblevable/quick-scope'
@@ -43,11 +43,12 @@ return require('packer').startup(function()
     use 'simrat39/rust-tools.nvim'
     use {
         'nvim-telescope/telescope.nvim',
-        requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
+        requires = { { 'nvim-lua/popup.nvim' }, { 'nvim-lua/plenary.nvim' } },
         config = function()
             require('telescope').setup {
                 defaults = {
-                    vimgrep_arguments = {'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case'}
+                    vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number',
+                        '--column', '--smart-case' }
                 }
             }
         end
@@ -56,10 +57,19 @@ return require('packer').startup(function()
         'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
         config = function()
-            require'nvim-tree'.setup {}
+            require 'nvim-tree'.setup {}
         end
     }
     use 'cespare/vim-toml'
     use 'gpanders/editorconfig.nvim'
     use 'stevearc/dressing.nvim'
+    use {
+        'martineausimon/nvim-lilypond-suite',
+        requires = 'MunifTanjim/nui.nvim',
+        config = function()
+            require('nvls').setup({
+                -- edit config here (see "Customize default settings" in wiki)
+            })
+        end
+    }
 end)
