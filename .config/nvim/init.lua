@@ -1,4 +1,21 @@
+-- Start lazy package manager setup
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
+
 vim.g.mapleader = " "
+
+require("lazy").setup("plugins")
+-- End lazy package manager setup
 
 local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn   -- to call Vim functions e.g. fn.bufnr()
@@ -38,33 +55,21 @@ map('n', '<leader>o', 'm`o<Esc>``') -- Insert a newline in normal mode
 -- }
 
 -- Window movement
-map('n', '<c-h>', '<c-w>h')
-map('n', '<c-j>', '<c-w>j')
-map('n', '<c-k>', '<c-w>k')
-map('n', '<c-l>', '<c-w>l')
+vim.keymap.set('n', '<c-h>', '<c-w>h', { desc = 'move to left tab' })
+vim.keymap.set('n', '<c-j>', '<c-w>j', { desc = 'move to bottom tab' })
+vim.keymap.set('n', '<c-k>', '<c-w>k', { desc = 'move to tab above' })
+vim.keymap.set('n', '<c-l>', '<c-w>l', { desc = 'move to right tab' })
 
-map('n', '<c-n>', ':set relativenumber!<CR>')
+vim.keymap.set('n', '<c-n>', ':set relativenumber!<CR>', { desc = 'toggle rel num' })
 
-map('i', 'jk', '<Esc>')
-map('i', 'kj', '<Esc>')
-
--- Commands
--- cmd [[command! WhatHighlight :call util#syntax_stack()]]
-cmd [[command! PackerInstall packadd packer.nvim | lua require('plugins').install()]]
-cmd [[command! PackerUpdate packadd packer.nvim | lua require('plugins').update()]]
-cmd [[command! PackerSync packadd packer.nvim | lua require('plugins').sync()]]
-cmd [[command! PackerClean packadd packer.nvim | lua require('plugins').clean()]]
-cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').compile()]]
-
--- Autocommands
--- autocmd('start_screen', [[VimEnter * ++once lua require('start').start()]], true)
--- autocmd('misc_aucmds', { [[BufWinEnter * checktime]], [[TextYankPost * silent! lua vim.highlight.on_yank()]] }, true)
+vim.keymap.set('i', 'jk', '<Esc>')
+vim.keymap.set('i', 'kj', '<Esc>')
 
 -- Colorscheme
 cmd('colorscheme shine')
 
 opt.termguicolors = true
-opt.background = 'light'
+opt.background = 'dark'
 opt.number = true
 opt.relativenumber = true
 
@@ -219,32 +224,31 @@ require 'lspconfig'.lua_ls.setup {
     end
 }
 
-map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>')
-map('n', '<leader>gh', '<cmd>Gitsigns blame_line<CR>')
-map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-map("n", "<leader>gq", "<cmd>lua vim.lsp.buf.format()<CR>")
--- map('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+vim.keymap.set('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', { desc = 'hover [LSP]' })
+vim.keymap.set('n', '<leader>gh', '<cmd>Gitsigns blame_line<CR>', { desc = 'git blame line' })
+vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'goto definition [LSP]' })
+vim.keymap.set("n", "<leader>gq", "<cmd>lua vim.lsp.buf.format()<CR>", { desc = 'format [LSP]' })
+-- vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
 --
-map('n', '<leader>tt', ':NvimTreeToggle<CR>')
-map('n', '<leader>tf', ':NvimTreeFocus<CR>')
+vim.keymap.set('n', '<leader>tt', ':NvimTreeToggle<CR>', { desc = 'nvim tree toggle' })
+vim.keymap.set('n', '<leader>tf', ':NvimTreeFocus<CR>', { desc = 'nvim tree focus' })
 
 -- telescope
 --
-map('n', '<leader>ff', '<cmd> lua require("telescope.builtin").find_files()<cr>');
-map('n', '<leader>fg', '<cmd> lua require("telescope.builtin").live_grep()<cr>')
-map('n', '<leader>fb', '<cmd> lua require("telescope.builtin").buffers()<cr>')
-map('n', '<leader>fh', '<cmd> lua require("telescope.builtin").help_tags()<cr>')
-map('n', '<leader>ga', '<cmd> lua vim.lsp.buf.code_action()<cr>')
-map('n', 'gra', '<cmd> lua require("telescope.builtin").lsp_range_code_actions()<cr>')
-map('n', 'gr', '<cmd> lua require("telescope.builtin").lsp_references()<cr>')
+vim.keymap.set('n', '<leader>ff', '<cmd> lua require("telescope.builtin").find_files()<cr>',
+    { desc = 'find files [telescope]' });
+vim.keymap.set('n', '<leader>fg', '<cmd> lua require("telescope.builtin").live_grep()<cr>',
+    { desc = 'live grep [telescope]' })
+vim.keymap.set('n', '<leader>fb', '<cmd> lua require("telescope.builtin").buffers()<cr>',
+    { desc = 'buffer picker [telescope]' })
+vim.keymap.set('n', '<leader>fh', '<cmd> lua require("telescope.builtin").help_tags()<cr>',
+    { desc = 'find in help [telescope]' })
+vim.keymap.set('n', '<leader>ga', '<cmd> lua vim.lsp.buf.code_action()<cr>', { desc = 'code action [LSP]' })
+vim.keymap.set('n', 'gra', '<cmd> lua require("telescope.builtin").lsp_range_code_actions()<cr>',
+    { desc = 'range code action [LSP]' })
+vim.keymap.set('n', 'gr', '<cmd> lua require("telescope.builtin").lsp_references()<cr>',
+    { desc = 'find references [LSP]' })
 
-require("telescope").setup {
-    pickers = {
-        colorscheme = {
-            enable_preview = true
-        }
-    }
-}
 -- autocommands
 cmd('autocmd BufWritePre *.rs lua vim.lsp.buf.format()')
 cmd('autocmd BufWritePre *.c lua vim.lsp.buf.format()')
@@ -260,19 +264,3 @@ function _G.dump(...)
 end
 
 cmd('au! BufRead,BufNewFile *.glsl,*.vert,*.frag set filetype=glsl')
-
-require('rust-tools').setup({
-    server = {
-        ["rust_analyzer"] = {
-            cargo = {
-                allFeatures = true
-            },
-            procMacro = {
-                enable = true
-            },
-            checkOnSave = {
-                command = "clippy"
-            }
-        }
-    }
-})
